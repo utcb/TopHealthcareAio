@@ -2,11 +2,33 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.haiforce.tophealthcareaio" >
 
+    <!-- 蓝牙权限 -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name="com.haiforce.tophealthcareaio.aiaole.activity.BleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <!-- BleService -->
+        <service
+            android:name="com.xtremeprog.sdk.ble.BleService"
+            android:enabled="true">
+        </service>
+
+        <!-- 主界面 -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -16,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
