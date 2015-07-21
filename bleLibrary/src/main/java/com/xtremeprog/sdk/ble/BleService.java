@@ -142,12 +142,14 @@ public class BleService extends Service {
 	private IBle mBle;
 	private Queue<BleRequest> mRequestQueue = new LinkedList<BleRequest>();
 	private BleRequest mCurrentRequest = null;
-	private static final int REQUEST_TIMEOUT = 10 * 10; // total timeout =
-														// REQUEST_TIMEOUT *
-														// 100ms
+	private static final int REQUEST_TIMEOUT_CHECK_INTERVAL = 10; // check every 10ms
+	private static final int REQUEST_TIMEOUT = 100 * 10; // total timeout =
+														// REQUEST_TIMEOUT * REQUEST_TIMEOUT_CHECK_INTERVAL
+														// 10 seconds
 	private boolean mCheckTimeout = false;
 	private int mElapsed = 0;
 	private Thread mRequestTimeout;
+	private boolean clearTimeOutTwice = false; // if clearTimeoutThread twice, no need to start new timeout thread
 	private String mNotificationAddress;
 
 	private Runnable mTimeoutRunnable = new Runnable() {
@@ -158,7 +160,7 @@ public class BleService extends Service {
 			try {
 				while (mCheckTimeout) {
 					// Log.d(TAG, "monitoring timeout seconds: " + mElapsed);
-					Thread.sleep(100);
+					Thread.sleep(REQUEST_TIMEOUT_CHECK_INTERVAL);
 					mElapsed++;
 
 					if (mElapsed > REQUEST_TIMEOUT && mCurrentRequest != null) {
@@ -362,6 +364,13 @@ public class BleService extends Service {
 	}
 
 	private void clearTimeoutThread() {
+		mCheckTimeout = false;
+		clearTimeOutTwice = false;
+		if (mRequestTimeout == null) {
+			Log.d(TAG, "mRequestTimeout is null, set clearTimeOutTwice=true");
+			clearTimeOutTwice = true;
+			return;
+		}
 		if (mRequestTimeout.isAlive()) {
 			try {
 				mCheckTimeout = false;
@@ -464,6 +473,11 @@ public class BleService extends Service {
 	}
 
 	private void startTimeoutThread() {
+		if (clearTimeOutTwice) {
+			Log.d(TAG, "clearTimeOutTwice is true, no need to start timeout thread");
+			clearTimeOutTwice = false; // reset clearTimeOutTwice flag
+			return;
+		}
 		mCheckTimeout = true;
 		mRequestTimeout = new Thread(mTimeoutRunnable);
 		mRequestTimeout.start();
