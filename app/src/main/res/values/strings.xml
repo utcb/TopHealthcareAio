@@ -3,4 +3,74 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="weekStr">Sun,Mon,Tues,Wed,Thur,Fri,Sat</string>
+    <string name="netwrok_tishi">No network, please connect to the network</string>
+    <string name="actt_manager">Administrator</string>
+    <string name="actt_user">User</string>
+    <string name="dialogs_loading">loading...</string>
+    <string name="ble_connect"> Open the device to connect</string>
+    <string name="boing_failed">Binding failed!</string>
+    <string name="press_again_exit">Press again to exit the application</string>
+
+    <!-- 主页 -->
+    <string name="homepage_device_btn">Device</string>
+    <string name="homepage_edit_btn">Edit</string>
+    <string name="homepage_editfinish_btn">Done</string>
+    <string name="homepage_week_text">This week</string>
+    <string name="homepage_Manual_records">Add data manually</string>
+    <string name="homepage_manual_update">Manual update</string>
+    <string name="homepage_showlist_btn">View</string>
+    <string name="homepage_hidelist_btn">Up</string>
+    <string name="dialogs_logining">loading...</string>
+    <string name="up_logining">loading...</string>
+    <string name="homepage_01bpm">Blood Pressure monitor</string>
+    <string name="homepage_02bgm">Blood glucose meter</string>
+    <string name="homepage_01bpm_result">Blood Pressure result</string>
+    <string name="homepage_02bgm_result">Blood glucose result</string>
+    <string name="homepage_erwenji">Ear temperature gun</string>
+    <string name="userNumber_str">(User Number:#th#)</string>
+
+    <!-- 设备管理界面 -->
+    <string name="equipmanage_headtitle">Devices Management</string>
+    <string name="equipmanage_role">Acct：</string>
+    <string name="equipmanage_lastUpdate">Last Synchronize:</string>
+    <string name="equipmanage_manageOtherUser">Manage other users</string>
+    <string name="equipmanage_deleteBind">Cancel Bonding</string>
+    <string name="equipmanage_bind">Bonding</string>
+    <string name="equipmanage_deleteBind_success">Cancel Bonding  success</string>
+    <string name="equipmanage_Bind_success">Bonding  success</string>
+    <string name="equipmanage_unbindIng">Unbonding</string>
+    <!-- 设备管理添加界面 -->
+    <string name="input_gsmbp">Enter the GSM Pressure Monitor serial number</string>
+    <string name="input_gsmbs">Enter the GSM Blood glucose meter serial number</string>
+    <string name="addGsmBp_headtitle">Add GSM blood pressure monitor</string>
+    <string name="addGsmBs_headtitle">Add GSM blood glucose meter</string>
+    <string name="addequipmanage_headtitle">Add Device</string>
+    <string name="addequipmanage_boolpresure_bl">Bluetooth blood pressure monitor</string>
+    <string name="addequipmanage_bule_tishi">Synchronize data using Bluetooth4.0</string>
+    <string name="addequipmanage_boolpresure_gsm">GSM Blood Pressure Monitor</string>
+    <string name="addequipmanage_gsm_tishi">Use the GSM network to synchronize data</string>
+    <string name="addequipmanage_heartrate_bl">Bluetooth blood glucose meter</string>
+    <string name="addequipmanage_heartrate_gsm">GSM blood glucose meter</string>
+    <string name="addequipmanage_binding">Bonding...</string>
+    <string name="addequip_backMainPage">Back to Home</string>
+    <string name="addequipmanage_bet">Bluetooth ear thermometer</string>
+    <string name="addequipmanage_search_bpt">Search the nearby Bluetooth Blood Pressure Monitor</string>
+    <string name="addequipmanage_search_bet">Search the nearby Bluetooth ear thermometer</string>
+    <string name="addequipmanage_search_bbg">Search the nearby Bluetooth glucose</string>
+    <string name="measure_title">Numerical measure</string>
+
+    <!-- 错误提示 -->
+    <string name="error_1121">Blood lipid</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+    <string name="bind_ble_t1">The sequence number is empty, can not be bound</string>
+    <string name="version_unknown">v1.06</string>
+    <string name="service_error">Server is busy！</string>
+    <string name="ble_tishi">Requires Android 4.3 or more and the Bluetooth 4.0</string>
+
+    <string name="scanBp">scan BP</string>
+    <string name="scan_start">scan</string>
+    <string name="scan_stop">stop</string>
 </resources>

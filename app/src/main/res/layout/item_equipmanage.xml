@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/eq_boolpressure" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="96dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/icon" >
+
+        <!-- 设备 使用者 -->
+
+        <LinearLayout
+            android:id="@+id/userLayout"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/equip_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="血压计"
+                android:textColor="@color/homepage_black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/username_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="user9527"
+                android:textColor="@color/homepage_black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- 角色 -->
+
+        <LinearLayout
+            android:id="@+id/roleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userLayout"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/equip_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/equipmanage_role"
+                android:textColor="@color/item_manual_record_datetime"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/username_role"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="管理员"
+                android:textColor="@color/item_manual_record_datetime"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="8dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/equipmanage_lastUpdate"
+                android:textColor="@color/item_manual_record_datetime"
+                android:textSize="14sp"
+                android:textStyle="bold" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/last_updatetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="2014-10-26"
+                android:textColor="@color/item_manual_record_datetime"
+                android:textSize="14sp"
+                android:textStyle="normal" >
+            </TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/right"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/item_enumercial_arrow_bule" />
+
+</RelativeLayout>

@@ -1,0 +1,349 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <!-- 澶撮儴 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/bule01" >
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/back_btn"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/head_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/addequipmanage_headtitle"
+            android:textColor="@color/white"
+            android:textSize="18sp" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/head_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/appname_text"
+            android:visibility="gone" />
+
+        <!-- 璺宠浆鎵竴鎵�-->
+
+        <LinearLayout
+            android:id="@+id/right_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/default_btn"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/addWhiceImg"
+                android:layout_width="fill_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/addequip_addwhich" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="168dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <!-- 钃濈墮琛�帇璁�-->
+
+                <LinearLayout
+                    android:id="@+id/bp_bule_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/eq_boolpressure_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_boolpresure_bl"
+                        android:textColor="@color/yellow"
+                        android:textSize="@dimen/add_device_textsize"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_bule_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+                <!-- gsm琛�帇璁�-->
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/addequip_line" />
+
+                <LinearLayout
+                    android:id="@+id/bp_gsm_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                       android:layout_marginTop="8dp"
+                        android:background="@drawable/eq_boolpressure" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_boolpresure_gsm"
+                        android:textColor="@color/yellow"
+                       android:textSize="@dimen/add_device_textsize"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_gsm_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/addequip_line" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="168dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <!-- 钃濈墮琛�帇璁�-->
+
+                <LinearLayout
+                    android:id="@+id/heartrate_bule_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/eq_hearrate_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_heartrate_bl"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/add_device_textsize"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_bule_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+                <!-- gsm琛�帇璁�-->
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/addequip_line" />
+
+                <LinearLayout
+                    android:id="@+id/br_gsm_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/gsm_bloodsugar_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_heartrate_gsm"
+                        android:textColor="@color/red"
+                       android:textSize="@dimen/add_device_textsize"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_gsm_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@color/addequip_line"
+                android:visibility="gone"
+                 />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="128dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:orientation="horizontal" >
+
+                <!-- 鑰虫俯搴﹁ -->
+
+                <LinearLayout
+                    android:id="@+id/erwen_bule_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/eq_hearrate_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_heartrate_bl"
+                        android:textColor="@color/red"
+                        android:textSize="20sp"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_bule_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+                <!-- gsm琛�帇璁�-->
+
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/addequip_line" />
+
+                <LinearLayout
+                    android:id="@+id/rw_gsm_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/gsm_bloodsugar_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_heartrate_gsm"
+                        android:textColor="@color/red"
+                        android:textSize="20sp"
+                        android:textStyle="bold" >
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="@string/addequipmanage_gsm_tishi"
+                        android:textColor="@color/equip_gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold" >
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
