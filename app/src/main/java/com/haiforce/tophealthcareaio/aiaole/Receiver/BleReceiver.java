@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -122,9 +123,11 @@ public class BleReceiver extends BroadcastReceiver {
 
 		} else if (BleService.BLE_GATT_CONNECTED.equals(action)) {
 			Log.d(DEBUG, "Gatt 连上了");
+            bufferSB.reset(); // 准备buffer
             MainActivity.setBleStatusText("蓝牙设备连接成功");
         } else if (BleService.BLE_GATT_DISCONNECTED.equals(action)) {
 			Log.d(DEBUG, "Gatt 断开了, begin...");
+            bufferSB.reset(); // 清空buffer
             MainActivity.setBleStatusText("蓝牙设备断开");
             dMap.remove(address);
 			updateHomePage();
@@ -134,6 +137,7 @@ public class BleReceiver extends BroadcastReceiver {
 			// scanning();
 		} else if (BleService.BLE_SERVICE_DISCOVERED.equals(action)) {
 			Log.d(DEBUG, "Service Dicovered读取了");
+            bufferSB.reset(); // 清空buffer
 			displayGattServices(address);
 		} else if (BleService.BLE_CHARACTERISTIC_READ.equals(action)
 				|| BleService.BLE_CHARACTERISTIC_CHANGED.equals(action)) {
@@ -159,145 +163,143 @@ public class BleReceiver extends BroadcastReceiver {
                 Log.d(DEBUG, "No data read/changed, waiting for next action");
                 return;
             }
-            byte start = val[0];
-            if (start == 85) { // 起始碼：固定为一常量：55H
-                bufferSB.reset();
-            } else { // 非起始码，继续添加
-                Log.d(DEBUG, "蓝牙通讯包首字节非起始码0x55，和前包合并");
+            if (bufferSB.size() > 0) { // 先判断前包是否合法，不合法先清空，避免后续包被污染
+                byte[] prevPkg = bufferSB.toByteArray();
+                if (prevPkg[0] != 85) { // not start with 0x55
+                    bufferSB.reset();
+                }
             }
-            bufferSB.write(val, 0, val.length);
+            bufferSB.write(val, 0, val.length); // 加入buffer，和前包合并
             val = bufferSB.toByteArray();
-            if (val == null) {
-                Log.d(DEBUG, "bufferSB.array return null.");
-            }
-            if (val.length <= 3) { // 起始码(0x55), 包长度，包类别，至少3字节长度
-                Log.d(DEBUG, "蓝牙通讯包长度小于3字节");
-                return;
-            }
-            byte pkgtype = val[2];
-            byte pkglen = val[1];
-            if (val.length < pkglen) { // 长度不够，继续
-                Log.d(DEBUG, "蓝牙通讯包长度不够: " + val.length + "<" + pkglen);
-                return;
-            }
-			Log.d(DEBUG, "组装好的数据:" + new String(Hex.encodeHex(val)));
-
-            if (pkgtype == 0) { // 信息包
-                Log.d(DEBUG, "信息包");
-                // showToast("信息包");
+            int pkgindex = 0; // val中通讯包的起始index
+            while (pkgindex < val.length) { // 可能包含多于一个通讯包的内容，循环处理
+                byte pkgstart = val[pkgindex + 0]; // 起始碼
+                if (pkgstart != 85) { // 起始碼：固定为一常量：55H
+                    Log.d(DEBUG, "蓝牙通讯包首字节不是起始码0x55，废弃已有缓存");
+                    bufferSB.reset();
+                    return;
+                }
+                if (val.length - pkgindex <= 3) { // 起始码(0x55), 包长度，包类别，至少3字节长度
+                    Log.d(DEBUG, "蓝牙通讯包长度小于3字节，继续读取");
+                    return;
+                }
+                byte pkglen = val[pkgindex + 1]; // 包长度
+                byte pkgtype = val[pkgindex + 2]; // 包类别
+                if (val.length - pkgindex < pkglen) { // 长度不够，继续
+                    Log.d(DEBUG, "蓝牙通讯包长度不够:[ " + val.length + " - " + pkgindex + " < " + pkglen + "] ");
+                    return;
+                }
+                byte[] pkgval = Arrays.copyOfRange(val, pkgindex, pkgindex + pkglen);
+                Log.d(DEBUG, "组装好的数据:" + new String(Hex.encodeHex(pkgval)));
+                pkgindex += pkglen; // 指向下一个包头
+                bufferSB.reset();
+                bufferSB.write(val, pkgindex, val.length - pkgindex); // bufferSB存放剩余的内容
+                // 处理完整包
+                if (pkgtype == 0) { // 信息包
+                    Log.d(DEBUG, "信息包");
+                    // showToast("信息包");
                 /*
                 if (modle.getMessageByte() != null && modle.getMessageByte().length > 0 && modle.getMessageByte()[5] == 1) {
                     Log.d(DEBUG, "已经接收过信息包，此次不处理");
                     return;
                 }
                 */
-                modle.setMessageByte(val);
-                try {
-                    // displayGattServices(address);
-                    write(getWriteCurrentTime(), address);
-                } catch (DecoderException e) {
-                    Log.d(DEBUG, "写入异常", e);
-                }
-                String deviceSerial = CommonUtil.getDeviceSerial(val);
-                Log.d(DEBUG, "deviceSerial is " + deviceSerial);
+                    modle.setMessageByte(pkgval); // 保存信息包
+                    try {
+                        // displayGattServices(address);
+                        write(getWriteCurrentTime(), address);
+                    } catch (DecoderException e) {
+                        Log.d(DEBUG, "写入异常", e);
+                    }
+                    String deviceSerial = CommonUtil.getDeviceSerial(pkgval); // 设备序列号
+                    Log.d(DEBUG, "deviceSerial is " + deviceSerial);
                 /*
                 // 提交服务器
                 // postBle(val[9] + "", val[8] + "", val[5] + "", deviceSerial, address);
 
                 // 更新扫描界面
                 updateScanView();
-                // 更新测量界面
-                Intent updateMeasure = new Intent(Gloal.update_Serial);
-                context.sendBroadcast(updateMeasure);
                 */
-            } else if (pkgtype == 1) { // 开始包
-                Log.d(DEBUG, "开始包");
-                try {
-                    guocheng_count = 0;
-                    lastGuoCheng = 0;
-                    write(getWriteCurrentTime(), address);
-                } catch (DecoderException e) {
-                    Log.d(DEBUG, "写入异常", e);
-                }
-
-            } else if (pkgtype == 2) { // 过程包
-                Log.d(DEBUG, "过程包");
-                guocheng_count++;
-                Log.d(DEBUG, "gc_" + guocheng_count + "");
-                if (lastGuoCheng == 0) {
-                    lastGuoCheng = System.currentTimeMillis();
-
-                } else {
-                    Long nowTime = System.currentTimeMillis();
-
-                    lastGuoCheng = nowTime;
-                }
-                // Log.d(DEBUG, "间隔秒数:" + guocheng_count + "");
-                Log.d(DEBUG, "guocheng_count:" + guocheng_count);
-            } else if (pkgtype == 3) { // 结果包
-                Log.d(DEBUG, "结果包");
-                modle.setResultByte(val);
-                byte[] messageByte = modle.getMessageByte();
-                byte[] resuleByte = modle.getResultByte();
-
-                if (messageByte == null || messageByte.length <= 6) {
-                    return;
-                }
-                byte mtype = messageByte[5];
-                String result1, result2, result3, result4;
-                result1 = result2 = result3 = result4 = "";
-                if (mtype == 1) {
-                    result2 = CommonUtil.getShort(resuleByte, 8) + "";
-                    result3 = resuleByte[10] + "";
-                    result4 = resuleByte[11] + "";
-
-                    if (Integer.parseInt(result2) > 500
-                            || Integer.parseInt(result2) <= 0) {
-                        return;
+                    // 更新测量界面
+                    Intent updateMeasure = new Intent(Gloal.update_Serial);
+                    updateMeasure.putExtra("deviceSerial", deviceSerial);
+                    context.sendBroadcast(updateMeasure);
+                } else if (pkgtype == 1) { // 开始包
+                    Log.d(DEBUG, "开始包");
+                    try {
+                        guocheng_count = 0;
+                        lastGuoCheng = 0;
+                        write(getWriteCurrentTime(), address);
+                    } catch (DecoderException e) {
+                        Log.d(DEBUG, "写入异常", e);
                     }
-                } else {
-                    result4 = CommonUtil.getShort(resuleByte, 9) + "";
+                } else if (pkgtype == 2) { // 过程包
+                    Log.d(DEBUG, "过程包");
+                    guocheng_count++;
+                    Log.d(DEBUG, "gc_" + guocheng_count + "");
+                    if (lastGuoCheng == 0) {
+                        lastGuoCheng = System.currentTimeMillis();
+
+                    } else {
+                        Long nowTime = System.currentTimeMillis();
+                        lastGuoCheng = nowTime;
+                    }
+                    // Log.d(DEBUG, "间隔秒数:" + guocheng_count + "");
+                    Log.d(DEBUG, "guocheng_count:" + guocheng_count);
+                } else if (pkgtype == 3) { // 结果包
+                    Log.d(DEBUG, "结果包");
+                    modle.setResultByte(pkgval); // 设置结果包
+                    byte[] messageByte = modle.getMessageByte(); // 信息包
+                    byte[] resuleByte = modle.getResultByte(); // 结果包
+
+                    if (messageByte == null || messageByte.length <= 6) {
+                        continue;
+                    }
+                    byte mtype = messageByte[5]; // 5.機種碼
+                    String result1, result2, result3, result4;
+                    result1 = result2 = result3 = result4 = "";
+                    if (mtype == 1) { // 0x01: 血压计
+                        result2 = CommonUtil.getShort(resuleByte, 8) + ""; // [8,9]: 收缩压，低位在前
+                        result3 = resuleByte[10] + ""; // [10]: 舒张压
+                        result4 = resuleByte[11] + ""; // [11]: 心率
+
+                        if (Integer.parseInt(result2) > 500
+                                || Integer.parseInt(result2) <= 0) { // 收缩压大于500，或小于0，认为出错
+                            continue;
+                        }
+                    } else { // 血糖仪
+                        result4 = CommonUtil.getShort(resuleByte, 9) + ""; // 血糖
+                    }
+
+                    // 测量时间
+                    String time;
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    time = sdf.format(new Date());
+                    String lastTime = modle.getSendTime();
+                    if (null == lastTime || !time.equals(lastTime)) {
+                        Log.d(DEBUG, "lastTime2:" + time);
+                        modle.setSendTime(time);
+                        String deviceSerial = CommonUtil.getDeviceSerial(messageByte);
+                        saveBleMeasure(address, result1, result2, result3, result4, mtype + "", deviceSerial, time);
+                    }
+
+                    try {
+                        write(getWriteCurrentTime(), address);
+                        updateMeatureView(messageByte, resuleByte);
+                        Log.d(DEBUG, "结束_" + guocheng_count + "");
+                    } catch (DecoderException e) {
+                        Log.d(DEBUG, "写入异常", e);
+                    }
+                } else if (pkgtype == 4) { // 结束包
+                    Log.d(DEBUG, "结束包，本次测量结束");
+                } else if (pkgtype == 5) { // APP返回，确认包。注意：这是APP发送给蓝牙设备的确认包
+                    Log.d(DEBUG, "APP返回确认包");
+                } else if (pkgtype == 6) { // APP终止连接包。注意：这是APP发送给拉洋设备的终止包
+                    Log.d(DEBUG, "APP终止连接包");
+                } else { // UNKNOWN
+                    Log.d(DEBUG, "未知包类型：" + pkgtype);
                 }
-
-                // 测量时间
-                String time;
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                time = sdf.format(new Date());
-
-                String lastTime = modle.getSendTime();
-
-                if (null == lastTime || !time.equals(lastTime)) {
-                    Log.d(DEBUG, "lastTime2:" + time);
-                    modle.setSendTime(time);
-
-                    String deviceSerial = CommonUtil
-                            .getDeviceSerial(messageByte);
-
-                    saveBleMeasure(address, result1, result2, result3,
-                            result4, mtype + "", deviceSerial, time);
-                }
-
-                try {
-
-                    write(getWriteCurrentTime(), address);
-
-                    updateMeatureView(messageByte, resuleByte);
-                    Log.d(DEBUG, "结束_" + guocheng_count + "");
-                } catch (DecoderException e) {
-                    Log.d(DEBUG, "写入异常", e);
-                }
-
-            } else if (pkgtype == 4) { // 结束包
-                Log.d(DEBUG, "结束包");
-            } else if (pkgtype == 5) { // APP返回，确认包
-                Log.d(DEBUG, "APP返回确认包");
-            } else if (pkgtype == 6) { // APP终止连接包
-                Log.d(DEBUG, "APP终止连接包");
-            } else { // UNKNOWN
-                Log.d(DEBUG, "未知包类型：" + pkgtype);
             }
-
 		} else if (BleService.BLE_CHARACTERISTIC_NOTIFICATION.equals(action)) {
 			boolean mNotifyStarted = extras.getBoolean(BleService.EXTRA_VALUE);
 			if (mNotifyStarted) {
@@ -508,15 +510,15 @@ public class BleReceiver extends BroadcastReceiver {
 						mWriteCharacteristices.add(mCharacteristic);
 					}
 
-				}
+                }
 			}
 			modle.setmWriteCharacteristices(mWriteCharacteristices);
 			modle.setmNoticeCharacteristices(mNoticeCharacteristices);
 		}
 		try {
-            Thread.sleep(500);
-			write(getWriteCurrentTime(), address);
-            Thread.sleep(500);
+            Thread.sleep(100);
+			write(getWriteCurrentTime(), address); // 配对成功，发送05应答包，开始通讯
+            Thread.sleep(100);
             Log.d(DEBUG, "回应设备:" + address);
 		} catch (DecoderException e) {
 			Log.d(DEBUG, "displayGattServices异常", e);

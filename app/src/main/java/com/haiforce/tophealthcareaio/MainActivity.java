@@ -102,6 +102,8 @@ public class MainActivity extends BaseActivity  implements View.OnClickListener 
         intentFilter.addAction(BleApplication.SCAN_STATE);
         intentFilter.addAction(CHANGE_DATA);
         intentFilter.addAction(BleReceiver.ENTER_MEASURE);
+        intentFilter.addAction(Gloal.update_measure_result);
+        intentFilter.addAction(Gloal.update_Serial);
         registerReceiver(mReceiver, intentFilter);
 
         // CommonUtil.checeBule(this);
@@ -152,6 +154,14 @@ public class MainActivity extends BaseActivity  implements View.OnClickListener 
                 }*/
                 // adapter.notifyDataSetChanged();
             } else if (BleReceiver.ENTER_MEASURE.equals(action)) {
+                TextView deviceSerialTxt = (TextView) findViewById(R.id.deviceSerialTxt);
+                deviceSerialTxt.setText("no serial");
+                TextView result2Txt = (TextView) findViewById(R.id.result2Txt);
+                result2Txt.setText("");
+                TextView result3Txt = (TextView) findViewById(R.id.result3Txt);
+                result3Txt.setText("");
+                TextView result4Txt = (TextView) findViewById(R.id.result4Txt);
+                result4Txt.setText("");
                 // 进入测量页面
                     /*
                 String mDeviceAddress = intent
@@ -161,6 +171,26 @@ public class MainActivity extends BaseActivity  implements View.OnClickListener 
                 measure_intent.putExtra(Gloal.send_address, mDeviceAddress);
                 startActivity(measure_intent);
                 */
+            } else if (Gloal.update_measure_result.equals(action)) {
+                Log.d(DEBUG, "Receive update_measure_result, try to display new result");
+                byte[] messageByte = intent.getByteArrayExtra(Gloal.send_messageByte);
+                byte[] resuleByte = intent.getByteArrayExtra(Gloal.send_resuleByte);
+                String result2, result3, result4;
+                result2 = result3 = result4 = "";
+                result2 = CommonUtil.getShort(resuleByte, 8) + ""; // [8,9]: 收缩压，低位在前
+                result3 = resuleByte[10] + ""; // [10]: 舒张压
+                result4 = resuleByte[11] + ""; // [11]: 心率
+                TextView result2Txt = (TextView) findViewById(R.id.result2Txt);
+                result2Txt.setText(result2);
+                TextView result3Txt = (TextView) findViewById(R.id.result3Txt);
+                result3Txt.setText(result3);
+                TextView result4Txt = (TextView) findViewById(R.id.result4Txt);
+                result4Txt.setText(result4);
+            } else if (Gloal.update_Serial.equals(action)) {
+                Log.d(DEBUG, "Receive update_Serial, try to display device serial");
+                String deviceSerail = intent.getStringExtra("deviceSerial");
+                TextView deviceSerialTxt = (TextView) findViewById(R.id.deviceSerialTxt);
+                deviceSerialTxt.setText(deviceSerail);
             }
 
         }
