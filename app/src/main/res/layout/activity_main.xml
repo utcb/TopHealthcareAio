@@ -167,4 +167,13 @@
             android:layout_column="2"/>
     </GridLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="扫描身份证"
+        android:id="@+id/idreadBtn"
+        android:layout_above="@+id/textView2"
+        android:layout_alignStart="@+id/gridLayout3"
+        android:onClick="readID"/>
+
 </RelativeLayout>

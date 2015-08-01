@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/TopHealthcareAio.iml" filepath="$PROJECT_DIR$/TopHealthcareAio.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/bleLibrary/bleLibrary.iml" filepath="$PROJECT_DIR$/bleLibrary/bleLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cvr100b/cvr100b.iml" filepath="$PROJECT_DIR$/cvr100b/cvr100b.iml" />
     </modules>
   </component>
 </project>

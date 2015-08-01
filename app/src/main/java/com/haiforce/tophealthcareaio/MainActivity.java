@@ -24,6 +24,7 @@ import com.haiforce.tophealthcareaio.aiaole.modle.Gloal;
 import com.haiforce.tophealthcareaio.aiaole.modle.NumericalModle;
 import com.haiforce.tophealthcareaio.aiaole.util.CommonUtil;
 import com.haiforce.tophealthcareaio.aiaole.util.NetRestClient;
+import com.haiforce.tophealthcareaio.cvr100b.Cvr100bActivity;
 import com.xtremeprog.sdk.ble.IBle;
 
 import org.json.JSONArray;
@@ -246,6 +247,10 @@ public class MainActivity extends BaseActivity  implements View.OnClickListener 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 点击"scan BP"按钮
+     * @param view
+     */
     public void scanBp(View view) {
         if (!CommonUtil.checeBule(this)) {
             return;
@@ -256,6 +261,15 @@ public class MainActivity extends BaseActivity  implements View.OnClickListener 
         } else {
             CommonUtil.scan(this, true);
         }
+    }
+
+    /**
+     * 点击"idreadBtn"
+     * @param view
+     */
+    public void readID(View view) {
+        Intent intent = new Intent(MainActivity.this, Cvr100bActivity.class);
+        startActivity(intent);
     }
 
     @Override
